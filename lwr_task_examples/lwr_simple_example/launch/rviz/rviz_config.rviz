@@ -199,7 +199,7 @@ Visualization Manager:
       Enabled: true
       Frame Timeout: 15
       Frames:
-        All Enabled: false
+        All Enabled: true
         EOF:
           Value: true
         lwr_1_link:
@@ -264,7 +264,7 @@ Visualization Manager:
           Value: true
       Marker Scale: 0.2
       Name: TF
-      Show Arrows: false
+      Show Arrows: true
       Show Axes: true
       Show Names: true
       Tree:
