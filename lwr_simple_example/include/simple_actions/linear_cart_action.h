@@ -10,6 +10,7 @@
 
 #include <std_msgs/Float64MultiArray.h>
 #include <robot_motion_generation/CDDynamics.h>
+#include <tf/transform_broadcaster.h>
 #include <memory>
 
 namespace simple_actions {
@@ -25,6 +26,8 @@ public:
     bool update();
 
     bool stop();
+
+    void set_cart_position( tf::Vector3 &position, tf::Quaternion & orientation );
 
 private:
 
@@ -45,10 +48,14 @@ public:
 private:
 
     tf::Vector3     target_origin;
-    tf::Vector3     target_p1, target_p2;
-    tf::Vector3     first_origin;
-    tf::Quaternion  target_R_p1, target_R_p2;
+    tf::Vector3     target_p1;
+//    tf::Vector3     first_origin;
+    tf::Quaternion  target_R_p1;
     tf::Quaternion  target_orientation;
+    tf::Vector3     current_position;
+    tf::Quaternion  current_orientation;
+    tf::Vector3     desired_position;
+    tf::Quaternion  desired_orientation;
 
     double          dist_target;
 
@@ -57,6 +64,8 @@ private:
 
     ros_controller_interface::Switch_controller switch_controller;
 
+    tf::Transform transform;
+    tf::TransformBroadcaster br;
 
     bool bSwitch;
     int target_id;
@@ -64,13 +73,7 @@ private:
 
     bool bFirst;
 
-
 };
 
-
 }
-
-
-
-
 #endif

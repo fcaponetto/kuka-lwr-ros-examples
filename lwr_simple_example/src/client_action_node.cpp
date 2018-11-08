@@ -6,6 +6,8 @@
 #include "lwr_ros_action/joint_action.h"
 #include "simple_actions/linear_cart_action.h"
 
+#include <geometry_msgs/Pose.h>
+
 /**
   *     Client Action node (simple example)
   *
@@ -61,6 +63,9 @@ int main(int argc, char **argv) {
     ac::Kuka_action_client kuka_action_client;
     std::map<std::string, ac::Base_action *> actions;
 
+    std::string name = "joint_controller";
+//    std::string name = "joint_controllers";
+
 
     /** ------------- Defining goals -------------
      *
@@ -80,28 +85,28 @@ int main(int argc, char **argv) {
     /*******************************************************************
      * Joint control
      *******************************************************************/
-    ac::Joint_action joint_go_front(nh);
+    ac::Joint_action joint_go_front(nh, name);
     des_position = {{-1.02974, 0.471239, 0.401426, -1.76278, -1.0472, -0.802851, 0.785398}};
     joint_go_front.set_joint_values(des_position, ac::Joint_action::MESSAGE_TYPE::JOINT_POSITION);
     joint_go_front.debug_print = true;
     actions["go_front"] = &joint_go_front;
 
 
-    ac::Joint_action joint_go_left(nh);
+    ac::Joint_action joint_go_left(nh, name);
     des_position = {{0.803, 0.4995, 0.0286, -1.986, 0.9915, -1.1997, -0.5516}};
     joint_go_left.set_joint_values(des_position, ac::Joint_action::MESSAGE_TYPE::JOINT_POSITION);
     joint_go_left.debug_print = true;
     actions["go_left"] = &joint_go_left;
 
 
-    ac::Joint_action joint_go_home(nh);
+    ac::Joint_action joint_go_home(nh, name);
     //des_position  =  {{0,0.785398,0.122173,-2.01099,-0.174533,0.261799,0}};
     des_position = {{0, 0.785398, 0.122173, -0.87, -0.174533, 0, 0}};
     joint_go_home.set_joint_values(des_position, ac::Joint_action::MESSAGE_TYPE::JOINT_POSITION);
     joint_go_home.debug_print = true;
     actions["go_home"] = &joint_go_home;
 
-    ac::Joint_action go_candle(nh);
+    ac::Joint_action go_candle(nh, name);
     des_position = {{0, 0, 0, 0, 0, 0, 0}};
     go_candle.set_joint_values(des_position, ac::Joint_action::MESSAGE_TYPE::JOINT_POSITION);
     go_candle.debug_print = true;
@@ -111,6 +116,10 @@ int main(int argc, char **argv) {
      * Cartesian control
      *******************************************************************/
     simple_actions::Linear_cart_action linear_cart_action(nh);
+    tf::Quaternion quat;
+    quat.setRPY(0,0,0);
+    tf::Vector3 vect(-0.1,-0.1,-0.1);
+    linear_cart_action.set_cart_position( vect, quat );
     actions["linear"] = &linear_cart_action;
 
     /**
@@ -132,7 +141,7 @@ int main(int argc, char **argv) {
 
 
     ros::Duration(1).sleep();
-    kuka_action_client.call_action("go_home");
+    kuka_action_client.call_action("linear");
 
     ROS_INFO("action CLIENT started!");
     ros::spin();

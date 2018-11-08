@@ -1,0 +1,2 @@
+- setup-file:
+    local-name: /home/nando/workspace/kuka/kuka-lwr-ros-examples/lwr_task_examples/lwr_simple_example/cmake-build-debug/devel/setup.sh
